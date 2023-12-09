@@ -14,6 +14,9 @@ export class User extends Document {
 
   @Prop({ default: Date.now })
   date: Date;
+
+  // @Prop({ default: false })
+  // isProfileCreated: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

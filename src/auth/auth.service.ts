@@ -33,6 +33,7 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       _id: user._id,
+      // isProfile: user.isProfileCreated,
     };
     return this.jwtService.sign(payload, {
       secret: this.configService.get<string>('secretKey'),
