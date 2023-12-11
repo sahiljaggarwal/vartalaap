@@ -15,11 +15,25 @@ import { JwtService } from '@nestjs/jwt';
 import { TokenMiddleware } from './middlewares/token.middleware';
 import { MessageModule } from './message/message.module';
 import { ProfileModule } from './profile/profile.module';
+import { ChatModule } from './chat/chat.module';
+import { MessageGateway } from './message/message.gateway';
 dotenv.config();
 @Module({
-  imports: [AuthModule, MongooseModule.forRoot(process.env.mongodb), MessageModule, ProfileModule],
+  imports: [
+    AuthModule,
+    MongooseModule.forRoot(process.env.mongodb),
+    MessageModule,
+    ProfileModule,
+    ChatModule,
+  ],
   controllers: [AppController],
-  providers: [AppService, GoogleStrategy, ConfigService, JwtService],
+  providers: [
+    AppService,
+    GoogleStrategy,
+    ConfigService,
+    JwtService,
+    MessageGateway,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

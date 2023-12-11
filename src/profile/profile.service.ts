@@ -12,6 +12,7 @@ import { ConfigService } from '@nestjs/config';
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 
 @Injectable()
 export class ProfileService {
@@ -21,11 +22,18 @@ export class ProfileService {
   ) {}
 
   // create new profile
-  async createProfile(profileData: ProfileDto, image: any): Promise<any> {
+  async createProfile(
+    profileData: ProfileDto,
+    image: any,
+    id: any,
+  ): Promise<any> {
     if (!profileData.username) {
       throw new BadRequestException('username is required');
     }
-    const newProfile = await new this.profileModel({ ...profileData });
+    const newProfile = await new this.profileModel({
+      user: id,
+      ...profileData,
+    });
     if (image) {
       try {
         const profileImage = image.path;
@@ -67,36 +75,53 @@ export class ProfileService {
 
   // update user profile
   private deleteImage(imagePath: string): void {
-    // Construct the full path to the image file
-    const fullPath = path.join(__dirname, '..', 'uploads', imagePath);
+    // Replace backslashes with forward slashes
+    const normalizedPath = imagePath.replace(/\\/g, '/');
+    if (!fs.existsSync(normalizedPath)) {
+      console.error(`Directory does not exist: ${normalizedPath}`);
+      return;
+    }
 
-    // Delete the image file
-    fs.unlink(fullPath, (err) => {
+    // Log whether the file exists before attempting to delete it
+    fs.access(normalizedPath, fs.constants.F_OK, (err) => {
       if (err) {
-        console.error(`Error deleting image file: ${err.message}`);
+        console.error(`File does not exist at path: ${normalizedPath}`);
+        return;
       }
+
+      // Delete the image file
+      fs.unlink(normalizedPath, (unlinkErr) => {
+        if (unlinkErr) {
+          console.error(`Error deleting image file: ${unlinkErr.message}`);
+        } else {
+          console.log('Image file deleted successfully.');
+        }
+      });
     });
   }
 
-  // async updateProfile(
-  //   id: string,
-  //   profileData: ProfileDto,
-  //   image: any,
-  // ): Promise<any> {
-  //   const existingProfile = await this.profileModel.findOne({ user: id });
-  //   if (profileData.username) {
-  //     existingProfile.username = profileData.username;
-  //   }
-  //   if (profileData.location) {
-  //     existingProfile.location = profileData.location;
-  //   }
-  //   if (profileData.about) {
-  //     existingProfile.about = profileData.about;
-  //   }
-  //   if (image) {
-  //     if (existingProfile.image) {
-  //       this.deleteImage(existingProfile.image);
-  //     }
-  //   }
-  // }
+  async updateProfile(
+    id: string,
+    profileData: ProfileDto,
+    image: any,
+  ): Promise<any> {
+    const existingProfile = await this.profileModel.findOne({ user: id });
+    if (profileData.username) {
+      existingProfile.username = profileData.username;
+    }
+    if (profileData.location) {
+      existingProfile.location = profileData.location;
+    }
+    if (profileData.about) {
+      existingProfile.about = profileData.about;
+    }
+    if (image) {
+      if (existingProfile.image) {
+        this.deleteImage(existingProfile.image);
+      }
+      existingProfile.image = image.path;
+    }
+    await existingProfile.save();
+    return existingProfile;
+  }
 }
