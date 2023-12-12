@@ -13,14 +13,14 @@ import { SuccessResponse } from 'src/common/SuccessResponse';
 import { ErrorResponse } from 'src/common/ErrorResponse';
 import { MessageDto } from 'src/dtos/message.dto';
 import { ChatService } from 'src/chat/chat.service';
-import { MessageGateway } from './message.gateway';
+// import { MessageGateway } from './message.gateway';
 
 @Controller('message')
 export class MessageController {
   constructor(
     private readonly messageService: MessageService,
     private readonly chatService: ChatService,
-    private readonly messageGateway: MessageGateway,
+    // private readonly messageGateway: MessageGateway,
   ) {}
 
   // create chat messages
@@ -38,6 +38,9 @@ export class MessageController {
         receiverId,
       );
       const chatId = chat['_id'];
+
+      // Join the room using WebSocket and emit welcome message
+
       const createMessage = await this.messageService.createMessage(
         messageData,
         senderUserId,
@@ -45,9 +48,7 @@ export class MessageController {
         chatId,
       );
 
-      this.messageGateway.server
-        .to(chatId.toString())
-        .emit('newMessage', createMessage);
+      // Emit the new message to the room
 
       return new SuccessResponse(
         { message: 'chat created', createMessage },
