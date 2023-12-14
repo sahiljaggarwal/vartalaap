@@ -39,4 +39,16 @@ export class AuthService {
       expiresIn: '365d',
     });
   }
+
+  // token varification and get user
+  async verifyToken(token: string): Promise<any> {
+    const decodedToken = await this.jwtService.verify(token, {
+      secret: this.configService.get<string>('secretKey'),
+    });
+    const user = await this.userModel.findById(decodedToken._id);
+    if (!user) {
+      throw new Error('Invalid token Or User Not Found');
+    }
+    return user;
+  }
 }

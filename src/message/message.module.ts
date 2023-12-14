@@ -8,6 +8,8 @@ import { ChatService } from 'src/chat/chat.service';
 import { MessageGateway } from './message.gateway';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { AuthModule } from 'src/auth/auth.module';
+import { AuthService } from 'src/auth/auth.service';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { ConfigService } from '@nestjs/config';
       },
     ]),
     ChatModule,
+    AuthModule,
   ],
   controllers: [MessageController],
   providers: [
@@ -26,6 +29,7 @@ import { ConfigService } from '@nestjs/config';
     MessageGateway,
     JwtService,
     ConfigService,
+    AuthService,
   ],
   exports: [MongooseModule],
 })

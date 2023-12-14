@@ -11,18 +11,30 @@ import {
 import { Server } from 'socket.io';
 import { MessageDto } from 'src/dtos/message.dto';
 import { MessageService } from './message.service';
+import { AuthService } from 'src/auth/auth.service';
 
 @WebSocketGateway()
 export class MessageGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(private readonly messageService: MessageService) {}
+  constructor(
+    private readonly messageService: MessageService,
+    private readonly authService: AuthService,
+  ) {}
   @WebSocketServer()
   server: Server;
 
   private readonly rooms = new Map<string, Set<string>>();
 
-  handleConnection(client: any, ...args: any[]) {
+  async handleConnection(client: any, ...args: any[]) {
+    const token = client.handshake.headers.authorization?.split('Bearer ')[1];
+    const user = await this.authService.verifyToken(token);
+    if (!user) {
+      // If token verification fails, disconnect the client
+      client.disconnect(true);
+      return;
+    }
+
     console.log('Client connected', client.id);
   }
 
