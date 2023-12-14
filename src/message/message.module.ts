@@ -7,6 +7,7 @@ import { ChatModule } from 'src/chat/chat.module';
 import { ChatService } from 'src/chat/chat.service';
 import { MessageGateway } from './message.gateway';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -19,7 +20,13 @@ import { JwtService } from '@nestjs/jwt';
     ChatModule,
   ],
   controllers: [MessageController],
-  providers: [MessageService, ChatService, MessageGateway, JwtService],
+  providers: [
+    MessageService,
+    ChatService,
+    MessageGateway,
+    JwtService,
+    ConfigService,
+  ],
   exports: [MongooseModule],
 })
 export class MessageModule {}

@@ -1,3 +1,6 @@
 export class MessageDto {
-  content: string;
+  content?: string;
+  receiverId?: string;
+  chatId?: string;
+  senderId?: string;
 }

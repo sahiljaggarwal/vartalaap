@@ -32,7 +32,7 @@ dotenv.config();
     GoogleStrategy,
     ConfigService,
     JwtService,
-    MessageGateway,
+    // MessageGateway,
   ],
 })
 export class AppModule implements NestModule {

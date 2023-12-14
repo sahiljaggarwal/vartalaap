@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MessageDto } from 'src/dtos/message.dto';
 import { Message, MessageSchema } from './message.schema';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class MessageService {
@@ -10,18 +11,14 @@ export class MessageService {
     @InjectModel(Message.name) private readonly messageModel: Model<Message>,
   ) {}
 
-  async createMessage(
-    messageDto: MessageDto,
-    senderUserId: any,
-    receiverId: any,
-    chatId: any,
-  ): Promise<Message> {
-    const { content } = messageDto;
+  async createMessage(messageDto: MessageDto): Promise<Message> {
+    const { content, senderId, receiverId, chatId } = messageDto;
+    const chatObjId = new mongoose.Types.ObjectId(chatId);
     const createdMessage = await new this.messageModel({
       content,
-      sender: senderUserId,
+      sender: senderId,
       receiver: receiverId,
-      chat: chatId,
+      chat: chatObjId,
     });
     console.log('createdMessage', createdMessage);
     return createdMessage.save();

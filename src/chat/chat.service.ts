@@ -23,19 +23,16 @@ export class ChatService {
       })
       .exec();
 
-    console.log('existChat: ', existingChat);
     if (existingChat) {
       return existingChat;
     }
 
     // If no chat exists, create a new one
-    console.log('ye code chal rha hai bhai');
     const createdChat = new this.chatModel({
       sender: senderObjId,
       receiver: receiverObjId,
     });
     const chat = await createdChat.save();
-    console.log('new created chat, id: ', chat);
     return chat;
   }
 

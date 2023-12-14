@@ -24,6 +24,9 @@ export class Profile {
 
   @Prop()
   image: string;
+
+  @Prop({ default: false })
+  isOnline: boolean;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);

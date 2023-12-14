@@ -20,52 +20,15 @@ export class MessageController {
   constructor(
     private readonly messageService: MessageService,
     private readonly chatService: ChatService,
-    // private readonly messageGateway: MessageGateway,
   ) {}
 
-  // create chat messages
-  @Post(':receiverId')
-  @HttpCode(201)
-  async createChatAndMessage(
-    @Body() messageData: MessageDto,
-    @Param('receiverId') receiverId: string,
-    @Req() req: any,
-  ): Promise<SuccessResponse<any> | ErrorResponse> {
-    try {
-      const senderUserId = req['user']._id;
-      const chat = await this.chatService.getOrCreateChat(
-        senderUserId,
-        receiverId,
-      );
-      const chatId = chat['_id'];
-
-      // Join the room using WebSocket and emit welcome message
-
-      const createMessage = await this.messageService.createMessage(
-        messageData,
-        senderUserId,
-        receiverId,
-        chatId,
-      );
-
-      // Emit the new message to the room
-
-      return new SuccessResponse(
-        { message: 'chat created', createMessage },
-        true,
-      );
-    } catch (error) {
-      console.log(error);
-      return new ErrorResponse(error.message, 500, false);
-    }
-  }
-
-  @Get('getMessages/:senderId/:receiverId')
+  @Get(':receiverId')
   @HttpCode(200)
   async getMessagesByChatId(
-    @Param('senderId') senderId: string,
+    @Req() req: any,
     @Param('receiverId') receiverId: string,
   ): Promise<SuccessResponse<any> | ErrorResponse> {
+    const senderId = req['user']._id;
     try {
       const chatId = await this.chatService.getMessagesByUsers(
         senderId,
