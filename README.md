@@ -80,14 +80,14 @@ To set up and run the Vartalaap Chat API, follow the instructions provided in th
    ```
 4. Create a .env file in the project root and add the following configurations:
   ```
-  MONGODB_URI = <your_mongodb_uri>
-  SECRET_KEY = <your_secret_key>
+   MONGODB_URI = <your_mongodb_uri>
+   SECRET_KEY = <your_secret_key>
 
-  GOOGLE_CLIENT_ID = <your_google_client_id>
-  GOOGLE_CLIENT_SECRET = <your_google_client_secret>
-  GOOGLE_CALLBACK_URL = <your_google_callback_url>
+   GOOGLE_CLIENT_ID = <your_google_client_id>
+   GOOGLE_CLIENT_SECRET = <your_google_client_secret>
+   GOOGLE_CALLBACK_URL = <your_google_callback_url>
 
-  URL = http://localhost:4000
+   URL = http://localhost:4000
 ```
 6. Run the application:
   ```
