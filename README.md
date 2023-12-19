@@ -33,10 +33,13 @@ Vartalaap is a robust chat API developed using NestJS, MongoDB, WebSockets, JWT,
 - **User Interaction:**
   - **Search Users:** Users can search for others based on their usernames.
   - **Real-time Connections:** Establishing real-time connections with other users is facilitated through WebSockets.
+  - **Online/Offline:** Real-time online/offline status updates ensure users are aware of each other's presence, facilitating better communication.
+  - **Last Seen**: Users can view the last seen status of others, providing insights into their activity and availability.
 
 - **Security:**
   - **JWT Authentication:** Token-based authentication ensures a secure and authenticated user experience.
   - **Authorization:** Access to real-time connections and message retrieval is protected, and unauthorized access is restricted.
+    
 
 ## Key Points
 
@@ -57,6 +60,13 @@ Vartalaap is a robust chat API developed using NestJS, MongoDB, WebSockets, JWT,
 
 - **Token-Based Authorization:**
   - Real-time connections and message retrieval are protected by JWT-based authorization, ensuring a secure environment.
+ 
+- **Last Seen**
+  - Users can view the last seen status of others, providing insights into their activity and availability.
+
+- **Online/Offline**
+  - Real-time online/offline status updates ensure users are aware of each other's presence, facilitating better communication.
+
 
 ## Getting Started
 
