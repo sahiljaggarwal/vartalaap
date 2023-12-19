@@ -10,7 +10,7 @@ export class Profile {
   @Prop({ required: true, unique: true })
   username: string;
 
-  @Prop({ default: null })
+  @Prop({ default: false })
   online: boolean;
 
   @Prop({ default: null })
@@ -24,9 +24,6 @@ export class Profile {
 
   @Prop()
   image: string;
-
-  @Prop({ default: false })
-  isOnline: boolean;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);

@@ -45,6 +45,22 @@ export class ProfileController {
     }
   }
 
+  // get Online User Profile
+  @Get('online')
+  @HttpCode(200)
+  async getOnlineUserProfile(
+    @Req() req: any,
+  ): Promise<SuccessResponse<any> | ErrorResponse> {
+    try {
+      const id = req['user']._id;
+      const result = await this.profileService.getProfileById(id);
+      return new SuccessResponse({ profile: 'user profile', result }, true);
+    } catch (error) {
+      console.log(error);
+      return new ErrorResponse(error.message, 500, false);
+    }
+  }
+
   // get profile by Id
   @Get(':id')
   @HttpCode(200)

@@ -11,5 +11,6 @@ import { ConfigService } from '@nestjs/config';
   ],
   controllers: [ProfileController],
   providers: [ProfileService, ConfigService],
+  exports: [ProfileService, MongooseModule],
 })
 export class ProfileModule {}

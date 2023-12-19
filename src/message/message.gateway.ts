@@ -12,6 +12,7 @@ import { Server } from 'socket.io';
 import { MessageDto } from 'src/dtos/message.dto';
 import { MessageService } from './message.service';
 import { AuthService } from 'src/auth/auth.service';
+import { ProfileService } from 'src/profile/profile.service';
 
 @WebSocketGateway()
 export class MessageGateway
@@ -20,6 +21,7 @@ export class MessageGateway
   constructor(
     private readonly messageService: MessageService,
     private readonly authService: AuthService,
+    private readonly profileService: ProfileService,
   ) {}
   @WebSocketServer()
   server: Server;
@@ -30,15 +32,21 @@ export class MessageGateway
     const token = client.handshake.headers.authorization?.split('Bearer ')[1];
     const user = await this.authService.verifyToken(token);
     if (!user) {
-      // If token verification fails, disconnect the client
       client.disconnect(true);
       return;
     }
-
+    const isOnline = await this.profileService.changeToOnlineStatus(user._id);
     console.log('Client connected', client.id);
   }
 
-  handleDisconnect(client: any) {
+  async handleDisconnect(client: any) {
+    const token = client.handshake.headers.authorization?.split('Bearer ')[1];
+    const user = await this.authService.verifyToken(token);
+    if (!user) {
+      client.disconnect(true);
+      return true;
+    }
+    const isOffline = await this.profileService.changeToOfflineStatus(user._id);
     console.log('Client disconnected:', client.id);
   }
 

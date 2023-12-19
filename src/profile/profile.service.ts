@@ -50,8 +50,8 @@ export class ProfileService {
 
   // get profile by Id
   async getProfileById(id: string): Promise<any> {
-    const objectId = new mongoose.Types.ObjectId(id);
-    const profile = await this.profileModel.findById(objectId);
+    // const objectId = new mongoose.Types.ObjectId(id);
+    const profile = await this.profileModel.findOne({ user: id });
     if (!profile) {
       throw new NotFoundException('profile not found');
     }
@@ -123,5 +123,27 @@ export class ProfileService {
     }
     await existingProfile.save();
     return existingProfile;
+  }
+
+  // change user profile online status
+  async changeToOnlineStatus(id: string): Promise<any> {
+    const profile = await this.profileModel.findOne({ user: id });
+    if (!profile) {
+      throw new NotFoundException('Profile not found');
+    }
+    profile.online = true;
+    profile.lastSeen = null;
+    await profile.save();
+  }
+
+  // change user profile offline status
+  async changeToOfflineStatus(id: string): Promise<any> {
+    const profile = await this.profileModel.findOne({ user: id });
+    if (!profile) {
+      throw new NotFoundException('Profile not found');
+    }
+    profile.online = false;
+    profile.lastSeen = new Date();
+    await profile.save();
   }
 }
