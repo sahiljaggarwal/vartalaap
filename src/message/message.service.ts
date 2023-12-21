@@ -21,7 +21,7 @@ export class MessageService {
       chat: chatObjId,
     });
     console.log('createdMessage', createdMessage);
-    return createdMessage.save();
+    return await createdMessage.save();
   }
 
   async getMessages(chatId: string): Promise<Message[]> {

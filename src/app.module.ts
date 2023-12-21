@@ -17,6 +17,8 @@ import { MessageModule } from './message/message.module';
 import { ProfileModule } from './profile/profile.module';
 import { ChatModule } from './chat/chat.module';
 import { MessageGateway } from './message/message.gateway';
+import { GroupModule } from './group/group.module';
+import { GroupMessageModule } from './group-message/group-message.module';
 dotenv.config();
 @Module({
   imports: [
@@ -25,6 +27,8 @@ dotenv.config();
     MessageModule,
     ProfileModule,
     ChatModule,
+    GroupModule,
+    GroupMessageModule,
   ],
   controllers: [AppController],
   providers: [
